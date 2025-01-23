@@ -2,7 +2,11 @@ import sqlite3
 import logging
 from contextlib import contextmanager
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+DB = "./database/search_results.db"
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 @contextmanager
@@ -29,7 +33,7 @@ def get_cursor(connection):
 def execute_or_fetch_query(
     query: str,
     params=None,
-    db: str = "./database/search_results.db",
+    db: str = DB,
     fetch: bool = False,
 ):
     """
@@ -55,7 +59,7 @@ def execute_or_fetch_query(
         return None
 
 
-def init_db(db="./database/search_results.db"):
+def init_db(db=DB):
     """
     Initializes the database by creating tables if they don't exist.
     Logs the database schema creation.

@@ -2,9 +2,9 @@ import re
 import logging
 from urllib.parse import urlparse
 
-# Setup logging
+SEARCH_TERM_FILE = "search_terms.txt"
+
 logging.basicConfig(
-    filename="categorization.log",
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
@@ -55,7 +55,7 @@ CATEGORY_RULES = {
 }
 
 
-def categorize_result(url, snippet):
+def categorize_result(url: str, snippet: str):
     """
     Categorizes a URL based on its domain and snippet content.
     """
@@ -65,7 +65,9 @@ def categorize_result(url, snippet):
 
     logging.debug(f"Categorizing URL: {url}")
     for category, rules in CATEGORY_RULES.items():
-        if any(re.search(pattern, domain) for pattern in rules["domains"]) or any(re.search(pattern, snippet_lower) for pattern in rules["keywords"]):
+        if any(re.search(pattern, domain) for pattern in rules["domains"]) or any(
+            re.search(pattern, snippet_lower) for pattern in rules["keywords"]
+        ):
             logging.info(f"Matched category: {category}")
             return category
 
@@ -73,7 +75,7 @@ def categorize_result(url, snippet):
     return "Other"
 
 
-def terms_file_parser(path: str = "search_terms.txt") -> list:
+def terms_file_parser(path: str = SEARCH_TERM_FILE) -> list:
     """
     Reads search terms from a file and returns them as a list.
     """

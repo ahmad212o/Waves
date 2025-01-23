@@ -12,12 +12,24 @@ from fake_useragent import UserAgent
 from time import sleep
 from contextlib import contextmanager
 
+
+DRIVER_PATH = "./chromedriver"
+WEBSITE = "https://www.bing.com"
+
+"""
+    I encountered technical obstacles with Google.com's automation due to 
+    strict security policies and Captcha challenges, so I switched to using 
+    Bing.com for more successful web scraping.
+"""
+
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 @contextmanager
-def get_service(driver_path: str = "./chromedriver"):
+def get_service(driver_path: str = DRIVER_PATH):
     """
     Context manager for managing the WebDriver service.
     It starts the service at the beginning and stops it once done.
@@ -81,7 +93,9 @@ def find_term_10_results(driver, term: str):
     Returns a list of tuples with the result information.
     """
     try:
-        WebDriverWait(driver, 15).until(EC.visibility_of_element_located((By.NAME, "q")))
+        WebDriverWait(driver, 15).until(
+            EC.visibility_of_element_located((By.NAME, "q"))
+        )
         input_element = driver.find_element(By.NAME, "q")
         input_element.clear()
         input_element.send_keys(term + Keys.ENTER)
@@ -92,7 +106,9 @@ def find_term_10_results(driver, term: str):
             )
         )
 
-        search_elements = driver.find_elements(By.XPATH, '//li[contains(@class, "b_algo")]')
+        search_elements = driver.find_elements(
+            By.XPATH, '//li[contains(@class, "b_algo")]'
+        )
         results = []
 
         for element in search_elements[: min(10, len(search_elements))]:
@@ -122,14 +138,14 @@ def find_term_10_results(driver, term: str):
                     categorize_result(link, description),
                 )
             )
-        
+
         return results
     except Exception as e:
         logging.error(f"Error during search result processing for term {term}: {e}")
         return []
 
 
-def get_terms_results(terms: list, website: str = "https://www.bing.com") -> dict:
+def get_terms_results(terms: list, website: str = WEBSITE) -> list:
     """
     Fetches the top 10 results for each term from a search engine.
     Returns a list of results, each containing the link, headline, description, term ID, and category.

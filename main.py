@@ -3,15 +3,13 @@ from database.db import execute_or_fetch_query, init_db
 from txt_parser import terms_file_parser
 from ui_automation import get_terms_results
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 def main():
-    """
-    Main function that initializes the database, retrieves search terms, 
-    fetches search results, and inserts the data into the database.
-    Logs each major operation and handles errors appropriately.
-    """
+
     try:
         # Initialize the database
         init_db()
@@ -40,7 +38,9 @@ def main():
         logging.info(f"Inserted {len(results)} results into the search_results table.")
 
         # Fetch and print all results to confirm insertion
-        all_results = execute_or_fetch_query(query="select * from search_results", fetch=True)
+        all_results = execute_or_fetch_query(
+            query="select * from search_results", fetch=True
+        )
         logging.info(f"Fetched {len(all_results)} search results from the database.")
         logging.debug(f"Data Fetched From Table {all_results}")
 
