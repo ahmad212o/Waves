@@ -4,10 +4,6 @@ from urllib.parse import urlparse
 
 SEARCH_TERM_FILE = "search_terms.txt"
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
 
 CATEGORY_RULES = {
     "Educational Resource": {
@@ -54,6 +50,11 @@ CATEGORY_RULES = {
     },
 }
 
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 def categorize_result(url: str, snippet: str):
     """
