@@ -15,6 +15,8 @@ from contextlib import contextmanager
 
 DRIVER_PATH = "./chromedriver"
 WEBSITE = "https://www.bing.com"
+PARENT_SEARCH_ELEMENT =  '//li[contains(@class, "b_algo")]'
+DESCRIPTION_CHILD_ELEMENT = './/p[contains(@class, "b_lineclamp3")]'
 
 """
     I encountered technical obstacles with Google.com's automation due to 
@@ -102,12 +104,12 @@ def find_term_10_results(driver, term: str):
 
         WebDriverWait(driver, 15).until(
             EC.presence_of_all_elements_located(
-                (By.XPATH, '//li[contains(@class, "b_algo")]')
+                (By.XPATH, PARENT_SEARCH_ELEMENT)
             )
         )
 
         search_elements = driver.find_elements(
-            By.XPATH, '//li[contains(@class, "b_algo")]'
+            By.XPATH, PARENT_SEARCH_ELEMENT
         )
         results = []
 
@@ -122,7 +124,7 @@ def find_term_10_results(driver, term: str):
 
             try:
                 description_element = element.find_element(
-                    By.XPATH, './/p[contains(@class, "b_lineclamp3")]'
+                    By.XPATH, DESCRIPTION_CHILD_ELEMENT
                 )
                 description = description_element.text.strip()
             except Exception as e:
@@ -154,7 +156,7 @@ def get_terms_results(terms: list, website: str = WEBSITE) -> list:
         with get_service() as svc:
             with get_webdriver(svc) as driver:
                 driver.get(website)
-                sleep(10)  # Allow time for the page to load
+                sleep(10)  # Allow time for the browser to load
                 terms_results = []
                 for term in terms:
                     logging.info(f"Fetching results for term: {term}")

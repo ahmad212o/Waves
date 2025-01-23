@@ -22,6 +22,7 @@ def main():
         # Fetch search results for the terms
         results = get_terms_results(terms=terms)
         logging.info(f"Retrieved search results for {len(terms)} terms.")
+        logging.info(f"Retrieved search results  {results} .")
 
         # Insert terms into the search_terms table, ignoring duplicates
         execute_or_fetch_query(
